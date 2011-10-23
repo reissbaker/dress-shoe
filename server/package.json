@@ -1,0 +1,18 @@
+{
+  "author": "Matt Baker",
+  "name": "dress-shoe",
+  "description": "A simple extension of sockjs to allow for namespaced channels of communication over websockets",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/reissbaker/dress-shoe.git"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">=v0.4.1"
+  },
+  "dependencies": {
+		"sockjs": ">= 0.0.4"
+	},
+  "devDependencies": {}
+}
