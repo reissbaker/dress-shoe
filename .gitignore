@@ -1,0 +1,10 @@
+*~
+.DS_Store
+*.tmproj
+node_modules
+todo.*
+*.sublime-project
+*.sublime-workspace
+*.swp
+client/sockjs-client
+server/node_modules
