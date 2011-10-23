@@ -1,15 +1,16 @@
 DRESS SHOE
 ==========
 
-A simple extension of [SockJS](http://sockjs.org), allowing for namespaced channels of communication.
+An wrapper around and extension of [SockJS](http://sockjs.org), allowing for
+namespaced channels of communication and cookie-based authorization.
 
 Requires sockjs-node on the server, and sockjs-client clientside.
 
 SERVER API
 ----------
 * `dressShoe(sockjs_opts)`
-* `server.on(event, callback)`
 * `server.authorize(callback)`
+* `server.on(event, callback)`
 * `connection.readyState()`
 * `connection.on(callback)`
 * `connection.send(message)`
