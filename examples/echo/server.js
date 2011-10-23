@@ -4,12 +4,15 @@ var node_static = require('node-static');
 
 // 1. Echo sockjs server
 var sockjs_opts = {sockjs_url: "http://majek.github.com/sockjs-client/sockjs-latest.min.js"};
-
-console.log(dressShoes);
 var sjs_echo = dressShoes(sockjs_opts);
+
+sjs_echo.handshake(function(cookies, accept) {
+	console.log(cookies);
+	accept(true);
+});
+
 sjs_echo.on('open', function(conn) {
 	conn.channel('super').on('message', function(e) {
-		console.log(e);
 		conn.channel('super').send(e);
 	});
 });

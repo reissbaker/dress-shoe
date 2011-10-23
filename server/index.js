@@ -77,12 +77,44 @@ connection = function(conn) {
 exports = module.exports = function(options) {
 	var sockserver = new sock.Server(options);
 	var emitter = new events.EventEmitter();
+
+	var handshake = function(cookies, callback) {
+		callback(true);
+	};
+
+	var combineHandshakes = function(h1, h2) {
+		return function(cookies, callback) {
+			h1(cookies, function(accepted) {
+				if(accepted)
+					h2(cookies, callback);
+				else
+					callback(false);
+			});
+		};
+	};
+
 	emitter.installHandlers = function(http, options) {
 		sockserver.installHandlers(http, options);
 	};
+	emitter.handshake = function(callback) {
+		handshake = combineHandshakes(handshake, callback);
+	};
 
 	sockserver.on('open', function(conn) {
-		emitter.emit('open', connection(conn));
+		var hcallback = function(data) {
+			data = data.data;
+			
+			if(typeof data.type === 'string' && data.type === 'handshake') {	
+				handshake(data.data, function(accepted) {
+					if(accepted) {
+						conn.removeListener('message', hcallback);
+						emitter.emit('open', connection(conn));
+					} else
+						conn.close();
+				});
+			}
+		};
+		conn.on('message', hcallback);
 	});
 
 	return emitter;

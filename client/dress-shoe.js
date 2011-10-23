@@ -1,10 +1,9 @@
 (function(window, SockJS) {
 	var Channel = function(sock, allChannels, channel) {
-		this.on = this.addEventListener = function(type, handler) {
+		this.on = this.addListener = function(type, handler) {
 			if(type === 'message') {
 				sock.addEventListener(type, function(data) {
 					data = JSON.parse(data.data);
-					console.log(data);
 					if(typeof data.type !== 'undefined' && data.type === channel)
 						handler(data.data);
 					else if(typeof data.type === 'undefined' && channel === 'message') {
@@ -31,7 +30,7 @@
 			return new Channel(sock, allChannels, c);
 		};
 
-		this.removeEventListener = function(channel, handler) {
+		this.removeListener = function(channel, handler) {
 			sock.removeEventListener(channel, handler);
 		};
 
@@ -63,6 +62,10 @@
 
 		allChannels = {};
 		sock = new SockJS(url, protocol, options);
+		sock.addEventListener('open', function() {
+			sock.send({type:'handshake', data:document.cookie});
+		});
+
 		channel = new Channel(sock, {}, 'message');
 
 		// only priveleged channels can close
