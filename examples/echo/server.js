@@ -6,7 +6,7 @@ var node_static = require('node-static');
 var sockjs_opts = {sockjs_url: "http://majek.github.com/sockjs-client/sockjs-latest.min.js"};
 var sjs_echo = dressShoes(sockjs_opts);
 
-sjs_echo.handshake(function(cookies, accept) {
+sjs_echo.authorize(function(cookies, accept) {
 	console.log(cookies);
 	accept(true);
 });

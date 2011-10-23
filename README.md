@@ -9,6 +9,7 @@ SERVER API
 ----------
 * `dressShoe(sockjs_opts)`
 * `server.on(event, callback)`
+* `server.authorize(callback)`
 * `connection.readyState()`
 * `connection.on(callback)`
 * `connection.send(message)`

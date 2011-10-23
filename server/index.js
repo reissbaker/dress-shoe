@@ -85,7 +85,7 @@ exports = module.exports = function(options) {
 	var combineHandshakes = function(h1, h2) {
 		return function(cookies, callback) {
 			h1(cookies, function(accepted) {
-				if(accepted)
+				if(typeof accepted === 'undefined' || accepted)
 					h2(cookies, callback);
 				else
 					callback(false);
@@ -96,7 +96,7 @@ exports = module.exports = function(options) {
 	emitter.installHandlers = function(http, options) {
 		sockserver.installHandlers(http, options);
 	};
-	emitter.handshake = function(callback) {
+	emitter.authorize = function(callback) {
 		handshake = combineHandshakes(handshake, callback);
 	};
 
