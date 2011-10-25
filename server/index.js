@@ -109,7 +109,7 @@ exports = module.exports = function(options) {
 				handshake(wrapped, data.data, function(accepted) {
 					if(accepted) {
 						conn.removeListener('message', hcallback);
-						emitter.emit('open', wrapped);
+						emitter.emit('open', wrapped, data.data);
 					} else
 						conn.close();
 				});
