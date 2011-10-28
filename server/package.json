@@ -2,7 +2,7 @@
   "author": "Matt Baker",
   "name": "dress-shoe",
   "description": "A simple extension of sockjs to allow for namespaced channels of communication over websockets",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/reissbaker/dress-shoe.git"
