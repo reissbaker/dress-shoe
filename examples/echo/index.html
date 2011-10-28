@@ -48,7 +48,6 @@
           log(' [*] Connected (using: '+shoe.protocol()+')');
       });
       shoe.on('close', function(e) {
-				console.log(e);
           log(' [*] Disconnected ('+e.status + ' ' + e.reason+ ')');
       });
       shoe.channel('super').on('data', function(e) {
