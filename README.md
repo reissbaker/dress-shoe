@@ -2,7 +2,8 @@ DRESS SHOE
 ==========
 
 An wrapper around and extension of [SockJS](http://sockjs.org), allowing for
-namespaced channels of communication and cookie-based authorization.
+cross-browser namespaced channels of communication and cookie-based authorization
+using WebSockets and NodeJS.
 
 Requires sockjs-node on the server, and sockjs-client clientside.
 
