@@ -5,7 +5,7 @@ sock = require('sockjs');
 
 /*
  * Emitter decorator function.
- * Returns an emitter than emits
+ * Returns an emitter that emits
  * things based on the provided
  * channel.
  */
