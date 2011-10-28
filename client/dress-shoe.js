@@ -20,7 +20,8 @@
 			}
 		};
 		
-		this.send = function(data) {
+		// emulate write, even though the client API is send, to match NodeJS API
+		this.write = function(data) {
 			sock.send({type:channel, data:data});
 		};
 
