@@ -3,7 +3,6 @@
 		this.on = this.addListener = function(type, handler) {
 			if(type === 'data') {
 				sock.addEventListener('message', function(data) {
-					console.log(data);
 					data = JSON.parse(data.data);
 					if(typeof data.type !== 'undefined' && data.type === channel)
 						handler(data.data);
@@ -23,7 +22,6 @@
 		
 		this.send = function(data) {
 			sock.send({type:channel, data:data});
-			console.log(channel + ': ' + data);
 		};
 
 		this.channel = function(chan) {
