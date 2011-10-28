@@ -23,20 +23,19 @@ channel = function(conn, allChannels, chan) {
 		return conn.readyState;
 	};
 
-	emitter.send = function(message) {
-		conn.send(JSON.stringify({type:chan, data:message}));
+	emitter.write = function(data) {
+		conn.write(JSON.stringify({type:chan, data:data}));
 	};
 
 	emitter.channel = function(childChannel) {
 		return channel(conn, allChannels, chan + '/' + childChannel);
 	};
 
-	conn.on('message', function(data) {
-		data = data.data;
+	conn.on('data', function(data) {
 		if(typeof data.type !== 'undefined' && typeof data.type === 'string') {
-			emitter.emit('message', data.data);
-		} else if(typeof data.type === 'undefined' &&  typeof chan === 'message') {
-			emitter.emit('message', data.data);
+			emitter.emit('data', data.data);
+		} else if(typeof data.type === 'undefined' &&  typeof chan === 'data') {
+			emitter.emit('data', data.data);
 		}
 	});
 
@@ -53,7 +52,7 @@ channel = function(conn, allChannels, chan) {
 
 connection = function(conn) {
 	var allChannels = {};
-	var emitter = channel(conn, allChannels, 'message');
+	var emitter = channel(conn, allChannels, 'data');
 
 	// only the main connection is allowed
 	// to force a close event.
@@ -63,8 +62,8 @@ connection = function(conn) {
 
 	// only the main connection is allowed to clear channels
 	emitter.clear = function(chan) {
-		if(allChannels['message/' + chan])
-			delete allChannels['message/' + chan];
+		if(allChannels['data/' + chan])
+			delete allChannels['data/' + chan];
 	};
 
 	return emitter;
@@ -75,7 +74,7 @@ connection = function(conn) {
  */
 
 exports = module.exports = function(options) {
-	var sockserver = new sock.Server(options);
+	var sockserver = sock.createServer(options);
 	var emitter = new events.EventEmitter();
 
 	var handshake = function(conn, cookies, callback) {
@@ -100,22 +99,20 @@ exports = module.exports = function(options) {
 		handshake = combineHandshakes(handshake, callback);
 	};
 
-	sockserver.on('open', function(conn) {
+	sockserver.on('connection', function(conn) {
 		var wrapped = connection(conn);
 		var hcallback = function(data) {
-			data = data.data;
-			
 			if(typeof data.type === 'string' && data.type === 'handshake') {	
 				handshake(wrapped, data.data, function(accepted) {
 					if(accepted) {
-						conn.removeListener('message', hcallback);
-						emitter.emit('open', wrapped, data.data);
+						conn.removeListener('data', hcallback);
+						emitter.emit('connection', wrapped, data.data);
 					} else
 						conn.close();
 				});
 			}
 		};
-		conn.on('message', hcallback);
+		conn.on('data', hcallback);
 	});
 
 	return emitter;

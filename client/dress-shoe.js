@@ -1,18 +1,21 @@
 (function(window, SockJS) {
 	var Channel = function(sock, allChannels, channel) {
 		this.on = this.addListener = function(type, handler) {
-			if(type === 'message') {
-				sock.addEventListener(type, function(data) {
+			if(type === 'data') {
+				sock.addEventListener('message', function(data) {
+					console.log(data);
 					data = JSON.parse(data.data);
 					if(typeof data.type !== 'undefined' && data.type === channel)
 						handler(data.data);
-					else if(typeof data.type === 'undefined' && channel === 'message') {
+					else if(typeof data.type === 'undefined' && channel === 'data') {
 						if(typeof data.data !== 'undefined')
 							handler(data.data);
 						else
 							handler(data);
 					}
 				});	
+			} else if(type === 'connection') {
+				sock.addEventListener('open', handler); // new SockJS API isn't on client yet -- needs emulation
 			} else {
 				sock.addEventListener(type, handler);
 			}
@@ -66,7 +69,7 @@
 			sock.send({type:'handshake', data:document.cookie});
 		});
 
-		channel = new Channel(sock, {}, 'message');
+		channel = new Channel(sock, {}, 'data');
 
 		// only priveleged channels can close
 		channel.close = function(code, reason) {
@@ -75,8 +78,8 @@
 
 		// only priveleged channels can clear
 		channel.clear = function(chan) {
-			if(typeof allChannels['message/' + chan] !== 'undefined')
-				delete allChannels['message/' + chan];
+			if(typeof allChannels['data/' + chan] !== 'undefined')
+				delete allChannels['data/' + chan];
 		};
 
 		channel.protocol = function() {

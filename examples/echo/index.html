@@ -44,14 +44,14 @@
       var log;
       var sockjs_url = 'http://127.0.0.1:9999/echo';
 			var shoe = dressShoe(sockjs_url, {cookie:true});
-      shoe.on('open', function() {
+      shoe.on('connection', function() {
           log(' [*] Connected (using: '+shoe.protocol()+')');
       });
       shoe.on('close', function(e) {
 				console.log(e);
           log(' [*] Disconnected ('+e.status + ' ' + e.reason+ ')');
       });
-      shoe.channel('super').on('message', function(e) {
+      shoe.channel('super').on('data', function(e) {
           log(' [ ] received: ' + e);
       });
 

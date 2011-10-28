@@ -11,9 +11,10 @@ sjs_echo.authorize(function(conn, cookies, accept) {
 	accept(true);
 });
 
-sjs_echo.on('open', function(conn) {
-	conn.channel('super').on('message', function(e) {
-		conn.channel('super').send(e);
+sjs_echo.on('connection', function(conn) {
+	conn.channel('super').on('data', function(e) {
+		console.log(e);
+		conn.channel('super').write(e);
 	});
 });
 
