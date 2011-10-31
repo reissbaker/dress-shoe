@@ -37,7 +37,7 @@ CLIENT API
 ----------
 * `dressShoe(url, protocol, options)` creates a connection, where `url` is a URL pointing to a sockjs-client 
 implementation, protocol is a list of unwanted WebSocket or WebSocket-emulating protocols, and options is a hash of 
-SockJS options.
+sockjs-client's options.
 * `connection.readyState()` tests whether the connection is ready.
 * `connection.on(event, callback)` adds an event handler to a connection. Connections emit `"data"` and `"close"` events;
 the former is emitted on new incoming data, and the latter is emitted if the connection is terminated. Both take handlers
