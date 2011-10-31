@@ -1,9 +1,9 @@
 DRESS SHOE
 ==========
 
-An wrapper around and extension of [SockJS](http://sockjs.org), allowing for
+A rich, classy wrapper around [SockJS](http://sockjs.org), allowing for
 cross-browser namespaced channels of communication and cookie-based authorization
-using WebSockets and NodeJS.
+using WebSockets and NodeJS. No Flash necessary -- just tasteful, elegant Javascript.
 
 Requires sockjs-node on the server, and sockjs-client clientside.
 
@@ -35,10 +35,21 @@ parent connections.
 
 CLIENT API
 ----------
-* `dressShoe(url, protocol, options)`
-* `connection.readyState()`
-* `connection.on(event, callback)`
-* `connection.write(message)`
-* `connection.close()`
-* `connection.channel(channelName)`
-* `connection.clear(channelName)`
+* `dressShoe(url, protocol, options)` creates a connection, where `url` is a URL pointing to a SockJS implementation, 
+protocol is a list of unwanted protocols, and options is a hash of SockJS options.
+* `connection.readyState()` tests whether the connection is ready.
+* `connection.on(event, callback)` adds an event handler to a connection. Connections emit `"data"` and `"close"` events;
+the former is emitted on new incoming data, and the latter is emitted if the connection is terminated. Both take handlers
+of the form `function(data)`.
+* `connection.write(message)` writes a message to a socket on the default channel.
+* `connection.close()` manually closes a connection. This is only necessary if you want to close a socket before it's
+ready to close -- if it closes itself (either by being terminated by the server or timing out), the client closes
+the connection itself and emits a `"close"` event.
+* `connection.channel(channelName)` creates or accesses a named channel on the connection, and returns it. Channels
+are exactly the same as connections, but they can't `close` or `clear`. They will, however, emit `"close"` events if
+the connection gets closed. Channels are namespaced -- writing something on a `"ninjaTurtle"` channel bypasses the
+default channel, and a message sent on the `"leonardo"` channel won't get picked up by the `"michaelangelo"` channel
+(or the default channel).
+* `connection.clear(channelName)` manually removes a channel. This is only necessary if you're making lots of short-lived
+channels on a long-lived connection; otherwise, just rely on the fact that channels are GCed at the same time as their
+parent connections.
