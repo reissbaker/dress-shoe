@@ -32,9 +32,9 @@ channel = function(conn, allChannels, chan) {
 	};
 
 	conn.on('data', function(data) {
-		if(typeof data.type !== 'undefined' && typeof data.type === 'string') {
+		if(typeof data.type !== 'undefined' && typeof data.type === 'string' && data.type === chan) {
 			emitter.emit('data', data.data);
-		} else if(typeof data.type === 'undefined' &&  typeof chan === 'data') {
+		} else if(typeof data.type === 'undefined' && chan === 'data') {
 			emitter.emit('data', data.data);
 		}
 	});
