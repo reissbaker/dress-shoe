@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/reissbaker/dress-shoe.png)](http://travis-ci.org/reissbaker/dress-shoe)
 DRESS SHOE
 ==========
 
